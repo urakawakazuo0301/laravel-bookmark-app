@@ -64,7 +64,7 @@ class BookmarkController extends Controller
         
         $validated = $request -> validate([
             'title' => 'required|max:255',
-            'url' => 'required|mad:255',
+            'url' => 'required|url|max:255',
             'description' => 'nullable',
         ]);
         
