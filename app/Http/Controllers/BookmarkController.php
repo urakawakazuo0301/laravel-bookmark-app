@@ -32,8 +32,26 @@ class BookmarkController extends Controller
         'title' => 'required|max:255',
         'url' => 'required|url|max:255',
         'description' => 'nullable',
+        'tags' => 'nullable|string',
        ]);
-       $request->user()->bookmarks()->create($validated);
+
+       $tagsString = $validated['tags'] ?? '';
+       unset($validated['tags']);
+
+       $bookmark = $request->user()->bookmarks()->create($validated);
+
+       $tagNames = collect(explode(',', $tagsString))
+        ->map(fn ($name) => trim($name))
+        ->filter()
+        ->unique();
+       
+        $tagIds = [];
+        foreach ($tagNames as $tagName) {
+            $tag = $request->user()->tags()->firstOrCreate(['name' => $tagName]);
+            $tagIds[] = $tag->id;
+        }
+
+       $bookmark->tags()->sync($tagIds);
        return redirect()->route('bookmarks.index')->with('success', '作成しました');
     }
 

@@ -42,6 +42,13 @@
                                     class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('description') }}</textarea>
                         </div>
 
+                        <div>
+                            <x-input-label for="tags" value="タグ（カンマ区切り）" />
+                            <x-text-input id="tags" name="tags" type="text" class="mt-1 block w-full"
+                                        :value="old('tags')"  />
+                            <x-input-error class="mt-2" :messages="$errors->get('tags')" />
+                        </div>
+
                         <div class="flex items-center gap-4">
                             <x-primary-button>保存</x-primary-button>
                             <a href="{{ route('bookmarks.index') }}" class="text-sm text-gray-600 hover:text-gray-900">一覧へ戻る</a>
