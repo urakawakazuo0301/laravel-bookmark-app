@@ -69,7 +69,7 @@ class BookmarkController extends Controller
      */
     public function edit(Request $request, string $id)
     {
-        $bookmark = $request->user()->bookmarks()->findOrFail($id);
+        $bookmark = $request->user()->bookmarks()->with('tags')->findOrFail($id);
         return view('bookmarks.edit', compact('bookmark'));
     }
 
@@ -78,15 +78,33 @@ class BookmarkController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $bookmark = $request->user()->bookmarks()->findOrFail($id);
+        $bookmark = $request->user()->bookmarks()->with('tags')->findOrFail($id);
         
         $validated = $request -> validate([
             'title' => 'required|max:255',
             'url' => 'required|url|max:255',
             'description' => 'nullable',
+            'tags' => 'nullable|string',
         ]);
+
+        $tagsString = $validated['tags'] ?? '';
+        unset($validated['tags']);
         
         $bookmark -> update($validated);
+
+        $tagNames = collect(explode(',', $tagsString))
+        ->map(fn ($name) => trim($name))
+        ->filter()
+        ->unique();
+       
+        $tagIds = [];
+        foreach ($tagNames as $tagName) {
+            $tag = $request->user()->tags()->firstOrCreate(['name' => $tagName]);
+            $tagIds[] = $tag->id;
+        }
+
+        $bookmark->tags()->sync($tagIds);
+
         return redirect()->route('bookmarks.show', $bookmark)->with('success', '更新しました');
     }
 
