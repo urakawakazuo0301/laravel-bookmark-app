@@ -11,7 +11,7 @@ class BookmarkController extends Controller
      */
     public function index(Request $request)
     {
-        $bookmarks = $request->user()->bookmarks()->latest()->get();
+        $bookmarks = $request->user()->bookmarks()->with('tags')->latest()->get();
         return view('bookmarks.index', ['bookmarks' => $bookmarks]);
     }
 
@@ -60,7 +60,7 @@ class BookmarkController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $bookmark = $request->user()->bookmarks()->findOrFail($id);
+        $bookmark = $request->user()->bookmarks()->with('tags')->findOrFail($id);
         return view('bookmarks.show', compact('bookmark'));
     }
 

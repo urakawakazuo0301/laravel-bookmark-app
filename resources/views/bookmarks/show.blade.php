@@ -22,6 +22,13 @@
                         </div>
 
                         <div>
+                            <h3 class="text-sm font-medium text-gray-500">タグ</h3>
+                            @foreach ($bookmark->tags as $tag)
+                                {{ $tag->name }}
+                            @endforeach
+                        </div>
+
+                        <div>
                             <h3 class="text-sm font-medium text-gray-500">URL</h3>
                             <a href="{{ $bookmark->url }}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline">
                                 {{ $bookmark->url }}

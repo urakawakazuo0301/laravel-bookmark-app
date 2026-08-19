@@ -27,6 +27,9 @@
                             <a href="{{ route('bookmarks.show', $bookmark) }}" class="text-indigo-600 hover:underline font-medium">
                                 {{ $bookmark->title }}
                             </a>
+                            @foreach ($bookmark->tags as $tag)
+                                {{ $tag->name }}
+                            @endforeach
                             <p class="text-sm text-gray-500">{{ $bookmark->url }}</p>
                         </div>
                     @empty
