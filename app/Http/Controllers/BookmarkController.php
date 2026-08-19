@@ -11,8 +11,22 @@ class BookmarkController extends Controller
      */
     public function index(Request $request)
     {
-        $bookmarks = $request->user()->bookmarks()->with('tags')->latest()->get();
-        return view('bookmarks.index', ['bookmarks' => $bookmarks]);
+        $bookmarks = $request->user()->bookmarks()->with('tags')->latest();
+
+        $tagName = $request->query('tag');
+
+        if ($tagName) {
+            $bookmarks->whereHas('tags', function ($query) use ($tagName) {
+                $query->where('name', $tagName);
+            });
+        }
+
+        $bookmarks = $bookmarks->get();
+
+        return view('bookmarks.index', [
+            'bookmarks' => $bookmarks,
+            'tagName' => $tagName,
+        ]);
     }
 
     /**

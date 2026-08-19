@@ -23,11 +23,14 @@
 
                         <div>
                             <h3 class="text-sm font-medium text-gray-500">タグ</h3>
-                            @foreach ($bookmark->tags as $tag)
-                                {{ $tag->name }}
-                            @endforeach
+                            <div class="mt-1 flex gap-1 flex-wrap">
+                                @foreach ($bookmark->tags as $tag)
+                                    <a href="{{ route('bookmarks.index', ['tag' => $tag->name]) }}" class="text-xs text-gray-700 bg-gray-100 hover:bg-gray-300 rounded px-2 py-0.5">
+                                        {{ $tag->name }}
+                                    </a>
+                                @endforeach
+                            </div>
                         </div>
-
                         <div>
                             <h3 class="text-sm font-medium text-gray-500">URL</h3>
                             <a href="{{ $bookmark->url }}" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:underline">

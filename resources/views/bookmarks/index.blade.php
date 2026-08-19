@@ -15,11 +15,17 @@
                         </div>
                     @endif
                     
-                    <div class="flex justify-end mb-4">
+                    <div class="flex justify-end mb-4 gap-2">
                         <a href="{{ route('bookmarks.create') }}"
                             class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
                             新規作成
                         </a>
+                        @if ($tagName)
+                        <a href="{{ route('bookmarks.index') }}"
+                            class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                            すべて表示
+                        </a>
+                        @endif
                     </div>
 
                     @forelse ($bookmarks as $bookmark)
@@ -27,13 +33,21 @@
                             <a href="{{ route('bookmarks.show', $bookmark) }}" class="text-indigo-600 hover:underline font-medium">
                                 {{ $bookmark->title }}
                             </a>
-                            @foreach ($bookmark->tags as $tag)
-                                {{ $tag->name }}
-                            @endforeach
+                            <div class="mt-1 flex gap-1 flex-wrap">
+                                @foreach ($bookmark->tags as $tag)
+                                    <a href="{{ route('bookmarks.index', ['tag' => $tag->name]) }}" class="text-xs text-gray-700 bg-gray-100 hover:bg-gray-300 rounded px-2 py-0.5">
+                                        {{ $tag->name }}
+                                    </a>
+                                @endforeach
+                            </div>
                             <p class="text-sm text-gray-500">{{ $bookmark->url }}</p>
                         </div>
                     @empty
+                        @if ($tagName)
+                            <p class="text-gray-500">このタグのブックマークはありません。</p>
+                        @else
                         <p class="text-gray-500">まだブックマークがありません。</p>
+                        @endif
                     @endforelse
                 </div>
             </div>
